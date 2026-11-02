@@ -23,9 +23,9 @@ Real world examples of this project include:
 - FLIR Defense Cerberus® XL C-UAS & LVSS ADA C-UAS
 
 # Methodology
-We intend to simulate mounted cameras sending data to with a CNN-based neural network to first detect and then accurately track drones live. It would be beneficial to tie in data from radar or other sensor systems, but we don't have that data available at this point in time and so we will only use data from cameras. \
-We are going to use a You Only Look Once (YOLO) algorithm in this project, as it's one of the most efficient and capable techniques for object detection to date. \
-YOLO is based on Convolutional Neural Networks, and so we can also run a CNN algorithm comparitively to more closely see the performance increase. \
+We intend to simulate mounted cameras sending data to with a CNN-based neural network to first detect and then accurately track drones or other aerial targets. It would be beneficial to tie in data from radar or other sensor systems, but we don't have that data available at this point in time and so we will only use data from cameras. \
+We are going to use a You Only Look Once (YOLO) algorithm in this project, as it's one of the most efficient and capable techniques for object detection and widely used for in these types of systems. \
+YOLO is. \
 We only use data from every 5'th frame in the videos for our first method to avoid duplicates in the dataset. \
 A lot of the helper code in preparing the data was written with support from Claude Opus 5.5. \
 Training was completed on an RTX 5090 paired with an AMD EPYC 9J14.
@@ -35,10 +35,16 @@ As we don't have access to military-grade advanced cameras or radars, we will us
 The dataset consists of both visual and IR-signature videos, which we then extract mostly non-duplicate frames from to train the CNN model. We will only use the visual videos though, as time does not allow for an extended scope beyond them. \
 There are four classes of items given by the dataset: Airplane, Helicopter, Drone, and Bird. We will use these to classify and track them in real time.
 
-# Discussion
-/images contains all graphics for the report from test evaluation. \
-/ran_on_server contains all files used in the vast_ai instance to train and test the model.
+# Results
+We finished training for 50 epochs in which the best epoch was actually epoch 16. For this epoch, we had a mAP50-95 of 0.428, mAP50 of 0.82, recall of 0.78, precision of 0.83. We also had a box loss of 1.7, a classification loss of 0.93 and a DFL loss of 1.27. 
 
+# Discussion
+Some preliminaries:
+- images/ contains all graphics for the report from test evaluation.
+- ran_on_server/ contains all files used in the vast_ai instance to train and test the model.
+
+On training the model, we found that using this dataset we receievd a mostly expected result in that it could classify drones, airplanes, and birds relatively well. \
+However, upon looking at the confusion matrix, we saw that there is a large portion of Birds misclassified as Drones. This is exactly the same problem mentioned in the objective section above, and is understandable given our limited dataset. In a real world example, the camera used for detection would need to be zoomed in on the target area to more accurately determine whether the 'drone' is actually a drone or just a bird. \
 
 # Shortcomings
 This project only focuses on visual (optical) identification, of which is mostly unreliable during nighttime. Under different circumstances, using IR data would improve that result, though the IR data we sourced was filled with noise which made training quite difficult.
