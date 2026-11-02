@@ -3,7 +3,7 @@
 from ultralytics import YOLO
 
 # path to best model from training
-bestModelPath = '/workspace/runs/detect/baseline-3/weights/best.pt'
+bestModelPath = '/workspace/runs/detect/train-final/weights/best.pt'
 
 if __name__ == "__main__":
     model = YOLO(bestModelPath)
