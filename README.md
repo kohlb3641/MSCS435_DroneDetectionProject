@@ -33,7 +33,7 @@ Training was completed on an RTX 5090 paired with an AMD EPYC 9J14.
 # Dataset
 As we don't have access to military-grade advanced cameras or radars, we will use a more accessible public dataset that is as close as we can probably get to data from those systems. \
 The dataset consists of both visual and IR-signature videos, which we then extract mostly non-duplicate frames from to train the CNN model. We will only use the visual videos though, as time does not allow for an extended scope beyond them. \
-There are four classes of items given by the dataset: Airplane, Helicopter, Drone, and Bird. We will use these to classify and track them in real time.
+There are four classes of items given by the dataset: Airplane, Helicopter, Drone, and Bird. We will use these to classify and track them in real time. \
 
 # Results
 We finished training for 50 epochs in which the best epoch was actually epoch 16. For this epoch, we had a mAP50-95 of 0.428, mAP50 of 0.82, recall of 0.78, precision of 0.83. We also had a box loss of 1.7, a classification loss of 0.93 and a DFL loss of 1.27. 
@@ -43,8 +43,10 @@ Some preliminaries:
 - images/ contains all graphics for the report from test evaluation.
 - ran_on_server/ contains all files used in the vast_ai instance to train and test the model.
 
-On training the model, we found that using this dataset we receievd a mostly expected result in that it could classify drones, airplanes, and birds relatively well. \
-However, upon looking at the confusion matrix, we saw that there is a large portion of Birds misclassified as Drones. This is exactly the same problem mentioned in the objective section above, and is understandable given our limited dataset. In a real world example, the camera used for detection would need to be zoomed in on the target area to more accurately determine whether the 'drone' is actually a drone or just a bird. \
+On initial training, we found that many classes were frequently misidentified as airplanes. We suspect that this is due to some of the airplane video files recording airplanes that are at cruising altitude, from ground level unzoomed. \
+This led the model to learn the background itself as an 'airplane' and would then identify everything as an airplane. To fix this, we simply ignored those select files that were filmed far away from the camera, as with the camera's low resolution, they would begin to dissolve into the background and become difficult for a model to train on. \
+On retraining the model,
+In a real world example, the camera used for detection would need to be zoomed in on the target area to more accurately determine whether the 'drone' is actually a drone or just a bird. \
 
 # Shortcomings
 This project only focuses on visual (optical) identification, of which is mostly unreliable during nighttime. Under different circumstances, using IR data would improve that result, though the IR data we sourced was filled with noise which made training quite difficult.
