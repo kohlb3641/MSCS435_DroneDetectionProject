@@ -3,3 +3,4 @@ yolo_dataset
 dataset
 runs
 ignored
+*.docx
